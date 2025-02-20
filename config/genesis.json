@@ -1,0 +1,28 @@
+{
+  "config": {
+    "chainId": 98765,
+    "homesteadBlock": 0,
+    "eip150Block": 0,
+    "eip155Block": 0,
+    "eip158Block": 0,
+    "byzantiumBlock": 0,
+    "constantinopleBlock": 0,
+    "petersburgBlock": 0,
+    "istanbulBlock": 0,
+    "londonBlock": 0,
+    "synergyConsensus": {
+      "algorithm": "Proof of Synergy",
+      "parameters": {
+        "epoch": 30000,
+        "blockTime": 5
+      }
+    }
+  },
+  "difficulty": "0x1",
+  "gasLimit": "0x2fefd8",
+  "alloc": {
+    "0x0000000000000000000000000000000000000001": {
+      "balance": "1000000000000000000000000"
+    }
+  }
+}
