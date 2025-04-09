@@ -14,7 +14,22 @@
       "algorithm": "Proof of Synergy",
       "parameters": {
         "epoch": 30000,
-        "blockTime": 5
+        "blockTime": 5,
+        "addressEncoding": "Bech32m",
+        "hashAlgorithm": "SHA3-256",
+        "prefixOptions": [
+          "sYnQ",
+          "sYnU"
+        ],
+        "keyScheme": "Dilithium-3",
+        "identitySystem": "UMA + SNS",
+        "crossChainSupport": [
+          "Ethereum",
+          "Solana",
+          "Cosmos"
+        ],
+        "vrfEnabled": true,
+        "addressLength": 41
       }
     }
   },
@@ -23,6 +38,12 @@
   "alloc": {
     "0x0000000000000000000000000000000000000001": {
       "balance": "1000000000000000000000000"
+    },
+    "sYnQ1zxy8qhj4j59xp5lwkwpd5qws9aygz8pl9m3kmjx3": {
+      "balance": "10000000000000000000000"
+    },
+    "sYnU-CONTRACT-8a7b5c9f3d6e1a2b4c7d8f9e0a5b6c3d": {
+      "balance": "0"
     }
   }
 }
