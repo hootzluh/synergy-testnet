@@ -29,18 +29,21 @@ fn main() {
             }
         }
 
-"start" => {
-    println!("Starting the node...");
+        "start" => {
+            println!("Starting the node...");
 
-    // Start RPC server in a new thread
-    std::thread::spawn(|| {
-        rpc::rpc_server::start_rpc_server();
-    });
+            // Start RPC server in a new thread and keep the handle
+            let rpc_handle = std::thread::spawn(|| {
+                rpc::rpc_server::start_rpc_server();
+            });
 
-    let mut consensus = ProofOfSynergy::new();
-    consensus.initialize();
-    consensus.execute();
-}
+            let mut consensus = ProofOfSynergy::new();
+            consensus.initialize();
+            consensus.execute();
+
+            // Keep the main thread alive after consensus by joining the RPC thread
+            rpc_handle.join().unwrap();
+        }
 
         "status" => {
             println!("Node status: Online");

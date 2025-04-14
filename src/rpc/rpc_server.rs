@@ -28,22 +28,34 @@ pub fn start_rpc_server() {
                             if request_str.contains("POST") {
                                 if let Some(json_start) = request_str.find('{') {
                                     let json_str = &request_str[json_start..];
+                                    println!("🔍 Extracted JSON payload:\n{}", json_str);
 
-                                    if let Ok(parsed) = serde_json::from_str::<Value>(json_str) {
-                                        if let Some(tx_hex) = parsed.get("tx") {
-                                            if let Some(tx_str) = tx_hex.as_str() {
-                                                match Transaction::from_json(tx_str) {
-                                                    Ok(tx) => {
-                                                        println!("✅ Parsed Transaction: {:?}", tx);
-                                                        let mut pool = tx_pool.lock().unwrap();
-                                                        pool.push(tx);
-                                                        println!("📦 Transaction added to pool. Total: {}", pool.len());
-                                                    }
-                                                    Err(e) => {
-                                                        eprintln!("❌ Failed to decode transaction: {}", e);
+                                    match serde_json::from_str::<Value>(json_str) {
+                                        Ok(parsed) => {
+                                            println!("✅ Parsed JSON: {:?}", parsed);
+
+                                            if let Some(tx_hex) = parsed.get("tx") {
+                                                if let Some(tx_str) = tx_hex.as_str() {
+                                                    println!("🔓 Decoding transaction: {}", tx_str);
+
+                                                    match Transaction::from_json(tx_str) {
+                                                        Ok(tx) => {
+                                                            println!("✅ Parsed Transaction: {:?}", tx);
+                                                            let mut pool = tx_pool.lock().unwrap();
+                                                            pool.push(tx);
+                                                            println!("📦 Transaction added to pool. Total: {}", pool.len());
+                                                        }
+                                                        Err(e) => {
+                                                            eprintln!("❌ Failed to decode transaction: {}", e);
+                                                        }
                                                     }
                                                 }
+                                            } else {
+                                                eprintln!("❌ 'tx' field missing in JSON.");
                                             }
+                                        }
+                                        Err(e) => {
+                                            eprintln!("❌ Failed to parse JSON: {}", e);
                                         }
                                     }
                                 }
