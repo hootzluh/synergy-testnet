@@ -1,38 +1,30 @@
+use std::io::Write;
+use std::net::TcpStream;
 use crate::transaction::Transaction;
-use reqwest::Client;
-use std::time::Duration;
-use tokio::time::sleep;
 
-/// Broadcast a transaction to a remote node using an HTTP POST request.
-/// Attempts retry logic on failure.
-pub async fn broadcast_transaction(transaction: &Transaction, target_ip: &str, port: u16) -> Result<String, String> {
-    let client = Client::builder()
-        .timeout(Duration::from_secs(5))
-        .build()
-        .map_err(|e| format!("Client init error: {}", e))?;
+pub fn broadcast_transaction() {
+    let tx = Transaction::new(
+        "sYnQ1zxy8qhj4j59xp5lwkwpd5qws9aygz8pl9m3kmjx3".to_string(),
+        "sYnQ1wlt52dlk9scmzphw7uc8p72v28j47yd8g0drmtc".to_string(),
+        1000,
+        1, // nonce
+        "demo-signature-placeholder".to_string(), // dummy signature for now
+    );
 
-    let url = format!("http://{}:{}/broadcast", target_ip, port);
+    let tx_data = tx.to_json();
 
-    let mut attempts = 0;
-    let max_attempts = 3;
+    println!("\n📡 Broadcasting transaction:\n{}", tx_data);
 
-    while attempts < max_attempts {
-        match client.post(&url).json(&transaction).send().await {
-            Ok(resp) => {
-                if resp.status().is_success() {
-                    let body = resp.text().await.unwrap_or_else(|_| "<no body>".to_string());
-                    return Ok(format!("✅ Broadcast success: {}", body));
-                } else {
-                    return Err(format!("❌ Broadcast failed with HTTP {}", resp.status()));
-                }
-            }
-            Err(e) => {
-                attempts += 1;
-                println!("⚠️ Broadcast attempt {}/{} failed: {}", attempts, max_attempts, e);
-                sleep(Duration::from_millis(500)).await;
+    match TcpStream::connect("192.168.1.68:8545") {
+        Ok(mut stream) => {
+            if let Err(e) = stream.write_all(tx_data.as_bytes()) {
+                eprintln!("❌ Failed to send transaction: {}", e);
+            } else {
+                println!("✅ Transaction sent successfully");
             }
         }
+        Err(e) => {
+            eprintln!("❌ Connection failed: {}", e);
+        }
     }
-
-    Err("❌ Max retries reached. Transaction broadcast failed.".to_string())
 }

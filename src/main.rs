@@ -31,3 +31,6 @@ async fn main() {
         tokio::time::sleep(std::time::Duration::from_secs(3600)).await;
     }
 }
+
+// Optional: Trigger a test transaction broadcast
+// broadcast::broadcast_transaction();
