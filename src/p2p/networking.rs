@@ -1,12 +1,21 @@
 use std::sync::{Arc, Mutex};
-use std::net::{TcpListener, TcpStream};
+use std::net::{TcpListener, TcpStream, IpAddr};
 use std::io::{Read, Write};
 use std::thread;
 use crate::block::Block;
+use crate::p2p::identity::generate_enode;
 
 /// Start a basic P2P network server that listens for incoming peer connections.
 pub fn start_p2p_network(blockchain: Arc<Mutex<Vec<Block>>>, listen_address: &str) {
     println!("🔌 Starting P2P network on {}", listen_address);
+
+    // Hardcoded local IP + port (replace as needed)
+    let local_ip: IpAddr = "192.168.1.68".parse().unwrap();
+    let local_port = 30303;
+
+    // Generate and print enode ID
+    let enode = generate_enode(local_ip, local_port);
+    println!("🔑 Local enode ID: {}", enode);
 
     let listener = TcpListener::bind(listen_address).expect("Failed to bind P2P port");
 
