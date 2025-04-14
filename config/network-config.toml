@@ -1,19 +1,18 @@
 [network]
-id = 98765
+id = 7966379
 name = "Synergy Testnet"
 p2p_port = 30303
 rpc_port = 8545
 ws_port = 8546
 max_peers = 50
 bootnodes = [
-  "enode://node1@127.0.0.1:30303",
-  "enode://node2@127.0.0.1:30304"
+  "enode://d18491c5a94ef758b6a15478818a1903054c830afdc2cc6b8d04d30d7c8e94b5bcd9c98f33c7ff5a02f7e4c7a5394fc5a4a41d1552d9e43c0e4745a3127c93d4@192.168.1.98:30303"
 ]
 
 [blockchain]
 block_time = 5
 max_gas_limit = "0x2fefd8"
-chain_id = 98765
+chain_id = 7966379
 
 [storage]
 database = "rocksdb"
