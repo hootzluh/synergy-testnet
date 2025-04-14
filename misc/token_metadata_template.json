@@ -1,0 +1,98 @@
+"mint account": {
+      "name": " ";,
+      "symbol": " ", // Token symbol
+      "decimals": 18, // Number of decimal places
+      "initial_supply": " ", // Initial supply of tokens
+      "contract_address": " ", // Address of the token contract
+      "token_address": " ", // Address of the token
+      "wallet_address": " ", // Address of the wallet
+      "mint_authority": " ", // Address of the mint authority
+      "update_authority": " ", // Address of the update authority
+      "uma": {
+           "universal_meta_address": " " // Address of the UMA universal meta
+     },
+     "sns": {
+           "synergy_name_service_id": " " // Address of the SNS Synergy Name Service
+     },
+     "foundation": {
+           "address": " ", // Address of the foundation wallet
+          "prefix": "sYnQ" // Prefix for the foundation wallet
+     },
+     "validators": [
+       {
+          "address": " ", // Address of the validator
+         "prefix": "sYnQ" // Prefix for the validator
+       }
+     ],
+     "governance": {
+       "address": " ", // Address of the governance contract
+       "prefix": "sYnU" // Prefix for the governance contract
+      "emergency": {
+    "address": " ", // Address of the emergency contract
+    "prefix": "sYnU" // Prefix for the emergency contract
+  },
+  "registrar": {
+    "address": " ", // Address of the registrar contract
+    "prefix": "sYnU" // Prefix for the registrar contract
+  },
+  "contract_owner": {
+    "address": " ", // Address of the contract owner
+    "prefix": "sYnU" // Prefix for the contract owner
+  },
+  "validator_1": {
+    "address": " ", // Address of the first validator
+    "prefix": "sYnQ" // Prefix for the first validator
+  },
+  "validator_2": {
+    "address": " ", // Address of the second validator
+    "prefix": "sYnQ" // Prefix for the second validator
+  },
+  "sns_registrar_owner": {
+    "address": " ", // Address of the SNS registrar owner
+    "prefix": "sYnU" // Prefix for the SNS registrar owner
+  },
+  "uma_registrar_owner": {
+    "address": " ", // Address of the UMA registrar owner
+    "prefix": "sYnU" // Prefix for the UMA registrar owner
+  },
+  "foundation_wallet": {
+    "address": " ", // Address of the foundation wallet
+    "prefix": "sYnQ" // Prefix for the foundation wallet
+  },
+  "syn_contract_owner": {
+    "address": " ", // Address of the SYN contract owner
+    "prefix": "sYnU" // Prefix for the SYN contract owner
+  },
+  "syn_mint": {
+    "address": " ", // Address of the SYN mint
+    "prefix": "sYnU" // Prefix for the SYN mint
+  },
+  "syn_treasury": {
+    "address": " ", // Address of the SYN treasury
+    "prefix": "sYnQ" // Prefix for the SYN treasury
+  },
+  "syn_validator_1": {
+    "address": " ", // Address of the first SYN validator
+    "prefix": "sYnQ" // Prefix for the first SYN validator
+  },
+  "syn_validator_2": {
+    "address": " ", // Address of the second SYN validator
+    "prefix": "sYnQ" // Prefix for the second SYN validator
+  },
+  "syn_governor_emergency": {
+    "address": " ", // Address of the SYN governor emergency
+    "prefix": "sYnU" // Prefix for the SYN governor emergency
+  },
+  "syn_sns_registrar_owner": {
+    "address": " ", // Address of the SYN SNS registrar owner
+    "prefix": "sYnU" // Prefix for the SYN SNS registrar owner
+  },
+  "syn_uma_registrar_owner": {
+    "address": " ", // Address of the SYN UMA registrar owner
+    "prefix": "sYnU" // Prefix for the SYN UMA registrar owner
+  },
+  "syn_foundation_wallet": {
+    "address": " ", // Address of the SYN foundation wallet
+    "prefix": "sYnQ" // Prefix for the SYN foundation wallet
+  },
+}

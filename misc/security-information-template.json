@@ -1,0 +1,40 @@
+{
+  "wallet": {
+    "wallet_name": "",
+    "sns_name": "",
+    "seed_phrase": "",
+    "passphrase_hash": "",
+    "pin_hash": "",
+    "public_key": "",
+    "private_key_encrypted": "",
+    "uma_address": "",
+    "wallet_type": "Hot | Cold | Hardware | Union"
+  },
+  "token": {
+    "token_name": "",
+    "token_symbol": "",
+    "contract_address": "",
+    "mint_address": "",
+    "associated_token_address": "",
+    "creator_wallet": "",
+    "update_authority": "",
+    "freeze_authority": ""
+  },
+  "smart_contract": {
+    "contract_name": "",
+    "contract_address": "",
+    "contract_creator_wallet": "",
+    "source_file": "",
+    "compiled_hash": "",
+    "deploy_tx": ""
+  },
+  "validator_node": {
+    "node_id": "",
+    "sns_name": "",
+    "public_key": "",
+    "private_key_encrypted": "",
+    "validator_type": "Task | Transaction | Cross-chain",
+    "associated_wallet": "",
+    "stake_amount": ""
+  }
+}

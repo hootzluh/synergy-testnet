@@ -1,6 +1,12 @@
 {
+  "meta": {
+    "network": "Synergy Testnet",
+    "version": "1.0.0",
+    "description": "Synergy Network Testnet Genesis Block",
+    "dateGenerated": "2025-04-11T00:00:00Z"
+  },
   "config": {
-    "chainId": 98765,
+    "chainId": 7963749,
     "homesteadBlock": 0,
     "eip150Block": 0,
     "eip155Block": 0,
@@ -9,40 +15,80 @@
     "constantinopleBlock": 0,
     "petersburgBlock": 0,
     "istanbulBlock": 0,
+    "muirGlacierBlock": 0,
+    "berlinBlock": 0,
     "londonBlock": 0,
+    "arrowGlacierBlock": 0,
+    "grayGlacierBlock": 0,
+    "mergeForkBlock": 0,
+    "shanghaiTime": 0,
+    "cancunTime": 0,
     "synergyConsensus": {
       "algorithm": "Proof of Synergy",
       "parameters": {
-        "epoch": 30000,
         "blockTime": 5,
+        "epoch": 30000,
+        "validatorClusterSize": 7,
+        "synergyScoreDecayRate": 0.05,
+        "vrfEnabled": true,
+        "vrfSeedEpochInterval": 1000,
+        "maxSynergyPointsPerEpoch": 100,
+        "maxTasksPerValidator": 10,
+        "rewardWeighting": {
+          "taskAccuracy": 0.5,
+          "uptime": 0.3,
+          "collaboration": 0.2
+        },
         "addressEncoding": "Bech32m",
         "hashAlgorithm": "SHA3-256",
+        "keyScheme": "Dilithium-3",
         "prefixOptions": [
           "sYnQ",
-          "sYnU"
+          "sYnU",
+          "sYnTW"
         ],
-        "keyScheme": "Dilithium-3",
+        "addressLength": 41,
         "identitySystem": "UMA + SNS",
         "crossChainSupport": [
           "Ethereum",
           "Solana",
-          "Cosmos"
+          "Cosmos",
+          "Bitcoin",
+          "Polkadot",
+          "Polygon"
         ],
-        "vrfEnabled": true,
-        "addressLength": 41
+        "governanceEnabled": true
       }
     }
   },
   "difficulty": "0x1",
-  "gasLimit": "0x2fefd8",
+  "gasLimit": "0x7A1200",
   "alloc": {
-    "0x0000000000000000000000000000000000000001": {
+    "synq1jx6pkfglfj6ph0gx98mjpayexyga0sn5ltfdtquyqnzphu6gx9lqcp92xr": {
       "balance": "1000000000000000000000000"
     },
-    "sYnQ1zxy8qhj4j59xp5lwkwpd5qws9aygz8pl9m3kmjx3": {
-      "balance": "10000000000000000000000"
+    "synq1gyf0yfu73qur4dpxyptmu7352ft4wfuqrmlmsluud6af4smy3gtsuj2563": {
+      "balance": "50000000000000000000000"
     },
-    "sYnU-CONTRACT-8a7b5c9f3d6e1a2b4c7d8f9e0a5b6c3d": {
+    "synq1gkjp0nh3rxm5h0qp8j4k3m3stpd53ujjjg8v8fskapw82cnsqq4ql9hxll": {
+      "balance": "50000000000000000000000"
+    },
+    "synu1zctf28jukwkgrp76pmd36p0qmjpfhcfnlehcpqeeanewjqzv4rcqs5058a": {
+      "balance": "0"
+    },
+    "synu19yxdhetqnnfha6d0na7xfegexpsmrfmxmq7f0hqjurysr4q2uqes83ajqs": {
+      "balance": "0"
+    },
+    "synq122p4u5ly3u5t06ua56ldjgw4spdccq25t6ucv5263na25g4ffe0qyqn00j": {
+      "balance": "0"
+    },
+    "synu1pqzve29qxhm4xxvs4tec30hl56pzl590dpfzr4lw90t73d5vdsns832wad": {
+      "balance": "0"
+    },
+    "synu10m6dk7gx542w5pjk0s0t9npss2x9avh0kjpsez5lcpa33dglpuysrcq80k": {
+      "balance": "0"
+    },
+    "synu1ycmaz5mvwradyt3vylkkwe68rf57z2uh9r690908nvn8gft874squsruq5": {
       "balance": "0"
     }
   }

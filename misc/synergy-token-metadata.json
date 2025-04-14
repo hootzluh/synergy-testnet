@@ -1,0 +1,68 @@
+{
+  "name": "Synergy Token",
+  "symbol": "SYN",
+  "decimals": 18,
+  "supply": "10000000000",
+  "mintAuthority": "sYnQ1zxy8qhj4j59xp5lwkwpd5qws9aygz8pl9m3kmjx3",
+  "freezeAuthority": "sYnQ1zxy8qhj4j59xp5lwkwpd5qws9aygz8pl9m3kmjx3",
+  "updateAuthority": "sYnQ1zxy8qhj4j59xp5lwkwpd5qws9aygz8pl9m3kmjx3",
+  "isMutable": true,
+  "primarySaleHappened": true,
+  "editionNonce": null,
+  "sns_name": "synergy.syn",
+  "uma_address": "uma:synergy.syn",
+  "sns_record": {
+    "owner_wallet": "sYnQ1zxy8qhj4j59xp5lwkwpd5qws9aygz8pl9m3kmjx3",
+    "contract_address": "sYnQ-CONTRACT-8a7b5c9f3d6e1a2b4c7d8f9e0a5b6c3d",
+    "mint_address": "sYnQ1zxy8qhj4j59xp5lwkwpd5qws9aygz8pl9m3kmjx3",
+    "associated_token_address": "sYnQ1u38kzp8qxlv2q3f9cwl2epylf0sdlgy54gtu2lz",
+    "validator_node": "validator1.syn",
+    "metadata_uri": "ipfs://bafybeifj7xtuvhz3d5m3zskwq3ldzck4pdszwapkn45bbokzixwnk3q4n4"
+  },
+  "description": "The native utility token of the Synergy Network blockchain, enabling governance, staking, smart contract execution, and cross-chain value transfer.",
+  "image": "https://cdn.synergy.network/logos/syn.png",
+  "external_url": "https://synergy.network",
+  "animation_url": "https://cdn.synergy.network/videos/token_intro.mp4",
+  "background_color": "#000000",
+  "attributes": [
+    {
+      "trait_type": "Network",
+      "value": "Testnet"
+    },
+    {
+      "trait_type": "Type",
+      "value": "Utility Token"
+    },
+    {
+      "trait_type": "Governance",
+      "value": "DAO Voting Rights"
+    }
+  ],
+  "properties": {
+    "category": "utility",
+    "files": [
+      {
+        "uri": "https://cdn.synergy.network/token-info.pdf",
+        "type": "application/pdf"
+      },
+      {
+        "uri": "https://cdn.synergy.network/media/syn.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "sYnQ1zxy8qhj4j59xp5lwkwpd5qws9aygz8pl9m3kmjx3",
+        "share": 100
+      }
+    ]
+  },
+  "governance_model": "Synergy DAO Quadratic Voting",
+  "voting_token_weight": "Synergy Score + Staked SYN",
+  "governance_rights": "Proposal Submission, Voting, DAO Grants",
+  "staking_mechanism": "Dynamic PoSy Reward Pools",
+  "burn_policy": "2% burn on every transfer",
+  "sp_allocation_policy": "Distributed based on task complexity, uptime, and cross-validator collaboration.",
+  "sp_eligible_roles": "Validators, Creators, Auditors",
+  "sp_bonus_conditions": "+15% bonus for multi-validator coordination and sustained uptime over 30 days"
+}

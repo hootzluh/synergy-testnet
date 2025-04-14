@@ -1,0 +1,56 @@
+{
+  "name": "",
+  "symbol": "",
+  "decimals": 0,
+  "supply": "",
+  "mintAuthority": "",
+  "freezeAuthority": "",
+  "updateAuthority": "",
+  "isMutable": true,
+  "primarySaleHappened": false,
+  "editionNonce": null,
+  "sns_name": "",
+  "uma_address": "",
+  "sns_record": {
+    "owner_wallet": "",
+    "contract_address": "",
+    "mint_address": "",
+    "associated_token_address": "",
+    "validator_node": "",
+    "metadata_uri": ""
+  },
+  "description": "",
+  "image": "",
+  "external_url": "",
+  "animation_url": "",
+  "background_color": "",
+  "attributes": [
+    {
+      "trait_type": "",
+      "value": ""
+    }
+  ],
+  "properties": {
+    "category": "",
+    "files": [
+      {
+        "uri": "",
+        "type": ""
+      }
+    ],
+    "creators": [
+      {
+        "address": "",
+        "share": 0
+      }
+    ]
+  },
+  "governance_model": "",
+  "voting_token_weight": "",
+  "governance_rights": "",
+  "staking_mechanism": "",
+  "burn_policy": "",
+  "sp_allocation_policy": "",
+  "sp_eligible_roles": "",
+  "sp_bonus_conditions": ""
+}
