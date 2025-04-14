@@ -1,7 +1,7 @@
 use synergy_testnet::block::{Block, BlockChain};
 use synergy_testnet::transaction::Transaction;
 use synergy_testnet::consensus::consensus_algorithm::ProofOfSynergy;
-
+use synergy_testnet::rpc;
 use std::env;
 use std::fs;
 use std::path::PathBuf;
@@ -29,13 +29,18 @@ fn main() {
             }
         }
 
-        "start" => {
-            println!("Starting the node...");
+"start" => {
+    println!("Starting the node...");
 
-            let mut consensus = ProofOfSynergy::new();
-            consensus.initialize();
-            consensus.execute();
-        }
+    // Start RPC server in a new thread
+    std::thread::spawn(|| {
+        rpc::rpc_server::start_rpc_server();
+    });
+
+    let mut consensus = ProofOfSynergy::new();
+    consensus.initialize();
+    consensus.execute();
+}
 
         "status" => {
             println!("Node status: Online");
