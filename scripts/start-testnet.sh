@@ -14,12 +14,12 @@ mkdir -p data/logs
 pkill -f synergy-testnet || true
 sleep 1
 
-# Build and launch testnet binary
+# Build the node
 echo "🚀 Launching node..."
 cargo build --release --bin synergy-testnet
 
-# Run the node in background with genesis and config loaded
-./target/release/synergy-testnet \
+# Start node in background and redirect logs
+nohup ./target/release/synergy-testnet \
   --genesis config/genesis.json \
   --config config/network-config.toml \
   > data/logs/testnet.out 2>&1 &

@@ -1,5 +1,5 @@
 use synergy_testnet::{rpc, consensus, p2p};
-use std::sync::Arc;
+// use std::sync::Arc;
 use tokio::task;
 
 #[tokio::main]
