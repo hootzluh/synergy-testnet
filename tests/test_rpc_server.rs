@@ -1,13 +1,13 @@
+use std::io::{Read, Write};
+use std::net::{TcpListener, TcpStream};
 use std::thread;
 use std::time::Duration;
-use std::net::{TcpStream, TcpListener};
-use std::io::{Write, Read};
 use synergy_testnet::rpc;
 
 #[test]
 fn test_rpc_server() {
     // Check if port 8545 is already in use
-    if TcpListener::bind("127.0.0.1:8545").is_ok() {
+    if TcpListener::bind("0.0.0.0:8545").is_ok() {
         // If the port is free, start the RPC server in a separate thread
         thread::spawn(|| {
             rpc::start_rpc_server();
@@ -20,8 +20,7 @@ fn test_rpc_server() {
     }
 
     // Attempt to connect to the RPC server
-    let mut stream = TcpStream::connect("127.0.0.1:8545")
-        .expect("Failed to connect to RPC server");
+    let mut stream = TcpStream::connect("0.0.0.0:8545").expect("Failed to connect to RPC server");
 
     // Send a dummy request to test response handling
     let request = b"GET / HTTP/1.1\r\nHost: localhost\r\n\r\n";

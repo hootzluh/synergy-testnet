@@ -2,6 +2,7 @@
 node_modules/
 target/
 target 2/
+data/
 
 # Ignore build artifacts
 *.o
