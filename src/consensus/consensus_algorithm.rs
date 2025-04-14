@@ -1,39 +1,37 @@
-use std::sync::{Arc, Mutex};
-use std::thread;
-use std::time::Duration;
-use crate::block::Block;
+use crate::block::{Block, BlockChain};
+use crate::transaction::Transaction;
 
-/// Starts the Proof of Synergy (PoSy) consensus engine.
-/// This simulates block proposal, validation, and addition to the chain.
-pub fn run_consensus(blockchain: Arc<Mutex<Vec<Block>>>) {
-    println!("🌀 Starting Proof of Synergy (PoSy) consensus engine...");
+pub struct ProofOfSynergy;
 
-    thread::spawn(move || {
-        loop {
-            {
-                let mut chain = blockchain.lock().unwrap();
-                let last_block = chain.last().cloned();
+impl ProofOfSynergy {
+    pub fn new() -> Self {
+        ProofOfSynergy
+    }
 
-                // Simulate proposing a new block
-                if let Some(prev) = last_block {
-                    let new_block = Block::new(
-                        prev.index + 1,
-                        prev.hash.clone(),
-                        vec![], // normally includes pending transactions
-                        "validator-0001".to_string(),
-                        prev.nonce + 1,
-                    );
+    pub fn initialize(&mut self) {
+        println!("🔧 Initializing Proof of Synergy...");
+    }
 
-                    if new_block.validate() {
-                        println!("✅ New block validated and added to chain: #{}", new_block.index);
-                        chain.push(new_block);
-                    } else {
-                        eprintln!("❌ Invalid block rejected.");
-                    }
-                }
-            }
+    pub fn execute(&mut self) {
+        println!("⚙️ Executing consensus engine...");
+    }
 
-            thread::sleep(Duration::from_secs(10));
+    pub fn mine_block(&mut self, chain: &BlockChain, transactions: Vec<Transaction>) -> Block {
+        let prev = chain.latest_block().expect("No previous block exists.");
+
+        let new_block = Block::new(
+            prev.index + 1,
+            transactions,
+            prev.hash.clone(),
+            "validator-0001".to_string(),
+            prev.nonce + 1,
+        );
+
+        if new_block.validate() {
+            println!("✅ Valid block mined: {}", new_block.hash);
+            new_block
+        } else {
+            panic!("❌ Invalid block.");
         }
-    });
+    }
 }

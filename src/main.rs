@@ -1,36 +1,49 @@
-use synergy_testnet::{rpc, consensus, p2p};
-// use std::sync::Arc;
-use tokio::task;
+use synergy_testnet::block::{Block, BlockChain};
+use synergy_testnet::transaction::Transaction;
+use synergy_testnet::consensus::consensus_algorithm::ProofOfSynergy;
 
-#[tokio::main]
-async fn main() {
-    println!("✅ Synergy Testnet Node is starting...");
+use std::env;
+use std::fs;
+use std::path::PathBuf;
+use std::process;
 
-    // NOTE: Replace with actual config loading when the config module is wired up correctly.
-    let p2p_address = "0.0.0.0:30303";
+fn main() {
+    println!("Synergy Testnet Node Starting...");
 
-    // Start the RPC server (no arguments required)
-    task::spawn_blocking(|| {
-        rpc::start_rpc_server(); // Now called with no args
-    });
+    let args: Vec<String> = env::args().collect();
+    if args.len() < 2 {
+        eprintln!("Usage: synergy-testnet <subcommand>");
+        process::exit(1);
+    }
 
-    // Start the consensus engine (no arguments required)
-    task::spawn_blocking(|| {
-        consensus::run_consensus(); // Now called with no args
-    });
+    let subcommand = &args[1];
 
-    // Start the async P2P listener
-    task::spawn(async move {
-        if let Err(e) = p2p::start_p2p_network(p2p_address).await {
-            eprintln!("P2P Error: {}", e);
+    match subcommand.as_str() {
+        "init" => {
+            let config_dir = PathBuf::from("config");
+            if !config_dir.exists() {
+                fs::create_dir_all(&config_dir).expect("Failed to create config directory");
+                println!("Created config directory.");
+            } else {
+                println!("Config directory already exists.");
+            }
         }
-    });
 
-    // Keep the node running
-    loop {
-        tokio::time::sleep(std::time::Duration::from_secs(3600)).await;
+        "start" => {
+            println!("Starting the node...");
+
+            let mut consensus = ProofOfSynergy::new();
+            consensus.initialize();
+            consensus.execute();
+        }
+
+        "status" => {
+            println!("Node status: Online");
+        }
+
+        _ => {
+            eprintln!("Unknown subcommand: {}", subcommand);
+            process::exit(1);
+        }
     }
 }
-
-// Optional: Trigger a test transaction broadcast
-// broadcast::broadcast_transaction();

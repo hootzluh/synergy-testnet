@@ -1,27 +1,46 @@
-use chrono::Utc;
-use sha3::{Digest, Sha3_256};
-use crate::transaction::Transaction;
-use std::fmt::{self, Debug};
 use std::sync::{Arc, Mutex};
-use crate::rpc::rpc_server::TX_POOL;
+use std::time::{SystemTime, UNIX_EPOCH};
+use crate::transaction::Transaction;
+use sha3::{Digest, Sha3_256};
+// Add Serde derives
+use serde::{Serialize, Deserialize};
 
-#[derive(Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Block {
     pub index: u64,
-    pub timestamp: i64,
+    pub timestamp: u64,
     pub transactions: Vec<Transaction>,
     pub previous_hash: String,
     pub hash: String,
+    pub validator_id: String,
+    pub nonce: u64,
 }
 
 impl Block {
-    pub fn new(index: u64, transactions: Vec<Transaction>, previous_hash: String) -> Self {
-        let timestamp = Utc::now().timestamp();
-        let block_string = format!("{index}{timestamp:?}{:?}{previous_hash}", transactions);
+    pub fn new(
+        index: u64,
+        transactions: Vec<Transaction>,
+        previous_hash: String,
+        validator_id: String,
+        nonce: u64,
+    ) -> Self {
+        let timestamp = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .expect("Time went backwards")
+            .as_secs();
+
         let mut hasher = Sha3_256::new();
-        hasher.update(block_string);
-        let result = hasher.finalize();
-        let hash = hex::encode(result);
+        hasher.update(index.to_be_bytes());
+        hasher.update(timestamp.to_be_bytes());
+        hasher.update(previous_hash.as_bytes());
+        hasher.update(validator_id.as_bytes());
+        hasher.update(nonce.to_be_bytes());
+
+        for tx in &transactions {
+            hasher.update(format!("{:?}", tx).as_bytes());
+        }
+
+        let hash = format!("{:x}", hasher.finalize());
 
         Block {
             index,
@@ -29,24 +48,35 @@ impl Block {
             transactions,
             previous_hash,
             hash,
+            validator_id,
+            nonce,
         }
     }
-}
 
-impl Debug for Block {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Block #{}\n  Timestamp: {}\n  Previous Hash: {}\n  Hash: {}\n  Transactions: {:?}",
-            self.index, self.timestamp, self.previous_hash, self.hash, self.transactions)
+    pub fn validate(&self) -> bool {
+        // Basic validation: ensure block hash starts with '00'
+        // Expand logic as needed for your real synergy chain
+        self.hash.starts_with("00")
     }
 }
 
-/// Mines a new block from the TX_POOL.
-pub fn mine_block() -> Block {
-    let mut pool = TX_POOL.lock().unwrap();
-    let transactions = pool.drain(..).collect::<Vec<Transaction>>();
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BlockChain {
+    pub chain: Vec<Block>,
+}
 
-    let previous_hash = "0".repeat(64); // Default hash for simplicity
-    let block = Block::new(1, transactions, previous_hash);
-    println!("⛏️  Mined new block: {:?}", block);
-    block
+impl BlockChain {
+    pub fn new() -> Self {
+        BlockChain {
+            chain: vec![],
+        }
+    }
+
+    pub fn add_block(&mut self, block: Block) {
+        self.chain.push(block);
+    }
+
+    pub fn latest_block(&self) -> Option<&Block> {
+        self.chain.last()
+    }
 }
