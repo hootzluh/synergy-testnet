@@ -21,6 +21,10 @@ base64 = "0.22.1"
 serde_yaml = "0.9.34"
 blake3 = "1.8.1"
 k256 = { version = "0.13", features = ["sha256"] }
+chrono = "0.4"
+sha3 = "0.10"
+lazy_static = "1.4"
+
 
 
 

@@ -1,5 +1,7 @@
 use std::io::{Read, Write};
 use std::net::TcpListener;
+pub mod rpc_server;
+
 
 pub fn start_rpc_server() {
     let listener =

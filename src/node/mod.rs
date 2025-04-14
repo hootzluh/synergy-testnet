@@ -12,7 +12,8 @@ pub struct Blockchain {
 
 impl Blockchain {
     pub fn new() -> Self {
-        let genesis_block = Block::new(0, "0".to_string(), vec![], "genesis-validator".to_string(), 0);
+        let genesis_block = Block::new(0, vec![], "0".to_string());
+
         Blockchain {
             chain: vec![genesis_block],
             pending_transactions: VecDeque::new(),
@@ -39,10 +40,8 @@ impl Blockchain {
 
         let new_block = Block::new(
             previous_block.index + 1,
-            previous_block.hash.clone(),
             transactions,
-            "validator-id".to_string(),
-            previous_block.nonce + 1
+            previous_block.hash.clone(),
         );
 
         self.chain.push(new_block);

@@ -1,71 +1,52 @@
+use chrono::Utc;
+use sha3::{Digest, Sha3_256};
 use crate::transaction::Transaction;
-use blake3::Hasher;
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::fmt::{self, Debug};
+use std::sync::{Arc, Mutex};
+use crate::rpc::rpc_server::TX_POOL;
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct Block {
     pub index: u64,
-    pub timestamp: u64,
+    pub timestamp: i64,
+    pub transactions: Vec<Transaction>,
     pub previous_hash: String,
     pub hash: String,
-    pub transactions: Vec<Transaction>,
-    pub validator: String,
-    pub nonce: u64,
 }
 
 impl Block {
-    /// Create a new block and compute its secure hash
-    pub fn new(index: u64, previous_hash: String, transactions: Vec<Transaction>, validator: String, nonce: u64) -> Self {
-        let timestamp = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .expect("Time went backwards")
-            .as_secs();
-
-        let hash = Self::calculate_hash(index, timestamp, &previous_hash, &transactions, &validator, nonce);
+    pub fn new(index: u64, transactions: Vec<Transaction>, previous_hash: String) -> Self {
+        let timestamp = Utc::now().timestamp();
+        let block_string = format!("{index}{timestamp:?}{:?}{previous_hash}", transactions);
+        let mut hasher = Sha3_256::new();
+        hasher.update(block_string);
+        let result = hasher.finalize();
+        let hash = hex::encode(result);
 
         Block {
             index,
             timestamp,
+            transactions,
             previous_hash,
             hash,
-            transactions,
-            validator,
-            nonce,
         }
     }
+}
 
-    /// Calculate a BLAKE3 hash of the block's contents
-    pub fn calculate_hash(
-        index: u64,
-        timestamp: u64,
-        previous_hash: &str,
-        transactions: &[Transaction],
-        validator: &str,
-        nonce: u64,
-    ) -> String {
-        let mut hasher = Hasher::new();
-        hasher.update(index.to_le_bytes().as_ref());
-        hasher.update(timestamp.to_le_bytes().as_ref());
-        hasher.update(previous_hash.as_bytes());
-        hasher.update(validator.as_bytes());
-        hasher.update(nonce.to_le_bytes().as_ref());
-
-        for tx in transactions {
-            hasher.update(serde_json::to_string(tx).unwrap().as_bytes());
-        }
-
-        hasher.finalize().to_hex().to_string()
+impl Debug for Block {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Block #{}\n  Timestamp: {}\n  Previous Hash: {}\n  Hash: {}\n  Transactions: {:?}",
+            self.index, self.timestamp, self.previous_hash, self.hash, self.transactions)
     }
+}
 
-    /// Verify block integrity (basic check)
-    pub fn validate(&self) -> bool {
-        self.hash == Self::calculate_hash(
-            self.index,
-            self.timestamp,
-            &self.previous_hash,
-            &self.transactions,
-            &self.validator,
-            self.nonce,
-        )
-    }
+/// Mines a new block from the TX_POOL.
+pub fn mine_block() -> Block {
+    let mut pool = TX_POOL.lock().unwrap();
+    let transactions = pool.drain(..).collect::<Vec<Transaction>>();
+
+    let previous_hash = "0".repeat(64); // Default hash for simplicity
+    let block = Block::new(1, transactions, previous_hash);
+    println!("⛏️  Mined new block: {:?}", block);
+    block
 }
