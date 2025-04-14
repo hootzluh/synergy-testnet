@@ -1,15 +1,38 @@
 use crate::transaction::Transaction;
-use reqwest::blocking::Client;
+use reqwest::Client;
+use std::time::Duration;
+use tokio::time::sleep;
 
-pub fn broadcast_transaction(transaction: &Transaction, target_ip: &str, port: u16) -> Result<String, String> {
-    let client = Client::new();
+/// Broadcast a transaction to a remote node using an HTTP POST request.
+/// Attempts retry logic on failure.
+pub async fn broadcast_transaction(transaction: &Transaction, target_ip: &str, port: u16) -> Result<String, String> {
+    let client = Client::builder()
+        .timeout(Duration::from_secs(5))
+        .build()
+        .map_err(|e| format!("Client init error: {}", e))?;
+
     let url = format!("http://{}:{}/broadcast", target_ip, port);
 
-    match client.post(&url).json(&transaction).send() {
-        Ok(resp) => match resp.text() {
-            Ok(body) => Ok(format!("Broadcast response: {}", body)),
-            Err(e) => Err(format!("Failed to read response body: {}", e)),
-        },
-        Err(e) => Err(format!("Failed to send transaction: {}", e)),
+    let mut attempts = 0;
+    let max_attempts = 3;
+
+    while attempts < max_attempts {
+        match client.post(&url).json(&transaction).send().await {
+            Ok(resp) => {
+                if resp.status().is_success() {
+                    let body = resp.text().await.unwrap_or_else(|_| "<no body>".to_string());
+                    return Ok(format!("✅ Broadcast success: {}", body));
+                } else {
+                    return Err(format!("❌ Broadcast failed with HTTP {}", resp.status()));
+                }
+            }
+            Err(e) => {
+                attempts += 1;
+                println!("⚠️ Broadcast attempt {}/{} failed: {}", attempts, max_attempts, e);
+                sleep(Duration::from_millis(500)).await;
+            }
+        }
     }
+
+    Err("❌ Max retries reached. Transaction broadcast failed.".to_string())
 }

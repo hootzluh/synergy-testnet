@@ -5,3 +5,4 @@ pub mod node;
 pub mod block;
 pub mod transaction;
 pub mod contracts;
+pub mod config;

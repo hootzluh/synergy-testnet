@@ -2,51 +2,57 @@
   "name": "Synergy Token",
   "symbol": "SYN",
   "decimals": 18,
+  "description": "The native utility and governance token for the Synergy Network blockchain ecosystem. Enables staking, gas fees, governance, atomic swaps, and validator rewards across all Synergy chains.",
   "supply": "10000000000",
-  "mintAuthority": "sYnQ1zxy8qhj4j59xp5lwkwpd5qws9aygz8pl9m3kmjx3",
-  "freezeAuthority": "sYnQ1zxy8qhj4j59xp5lwkwpd5qws9aygz8pl9m3kmjx3",
-  "updateAuthority": "sYnQ1zxy8qhj4j59xp5lwkwpd5qws9aygz8pl9m3kmjx3",
+  "initial_supply": "10000000000 SYN",
+  "image": "https://gateway.pinata.cloud/ipfs/bafkreidslh4we7japm2nlwfhq2tw6xamq7jsiyqmyfxzf4wvlcpgmspkyq",
+  "animation_url": null,
+  "external_url": "https://synergy-network.io",
+  "background_color": "#000000",
+  "sns_name": "synergy.syn",
+  "uma_address": "uma:synergy.syn",
+  "network": "Synergy Testnet",
   "isMutable": true,
   "primarySaleHappened": true,
   "editionNonce": null,
-  "sns_name": "synergy.syn",
-  "uma_address": "uma:synergy.syn",
-  "sns_record": {
-    "owner_wallet": "sYnQ1zxy8qhj4j59xp5lwkwpd5qws9aygz8pl9m3kmjx3",
-    "contract_address": "sYnQ-CONTRACT-8a7b5c9f3d6e1a2b4c7d8f9e0a5b6c3d",
-    "mint_address": "sYnQ1zxy8qhj4j59xp5lwkwpd5qws9aygz8pl9m3kmjx3",
-    "associated_token_address": "sYnQ1u38kzp8qxlv2q3f9cwl2epylf0sdlgy54gtu2lz",
-    "validator_node": "validator1.syn",
-    "metadata_uri": "ipfs://bafybeifj7xtuvhz3d5m3zskwq3ldzck4pdszwapkn45bbokzixwnk3q4n4"
-  },
-  "description": "The native utility token of the Synergy Network blockchain, enabling governance, staking, smart contract execution, and cross-chain value transfer.",
-  "image": "https://cdn.synergy.network/logos/syn.png",
-  "external_url": "https://synergy.network",
-  "animation_url": "https://cdn.synergy.network/videos/token_intro.mp4",
-  "background_color": "#000000",
+  "mintAuthority": "sYnQ1zxy8qhj4j59xp5lwkwpd5qws9aygz8pl9m3kmjx3",
+  "updateAuthority": "sYnU1auth9gqp4kpx3hdzwzqlxlyc0g6tqyz3k9gwdhfwru",
+  "freezeAuthority": "sYnU1frze7jqp2epaklm3rkzpvm8zks7fncjgsy9ufdmp3",
+  "contract_address": "sYnU1jrm8rhd38slkmn4whgpf2z4zprcnz6e8sxj0xtdcf",
+  "mint_address": "sYnU1mint8qhd4ayxt2m4kcc5wljxp2aemmt4pjyg0g7v9",
+  "associated_token_address": "sYnQ1tokn3qhp7el9pdl5fqqzhnk4v3xyc7egmfy5a4rcl",
+  "creator_wallet": "sYnQ1zxy8qhj4j59xp5lwkwpd5qws9aygz8pl9m3kmjx3",
   "attributes": [
     {
       "trait_type": "Network",
       "value": "Testnet"
     },
     {
-      "trait_type": "Type",
-      "value": "Utility Token"
+      "trait_type": "Token Type",
+      "value": "Utility & Governance"
     },
     {
       "trait_type": "Governance",
-      "value": "DAO Voting Rights"
+      "value": "DAO Quadratic Voting"
+    },
+    {
+      "trait_type": "Staking",
+      "value": "Dynamic PoSy Pools"
+    },
+    {
+      "trait_type": "Burn Policy",
+      "value": "2% per transfer"
     }
   ],
   "properties": {
     "category": "utility",
     "files": [
       {
-        "uri": "https://cdn.synergy.network/token-info.pdf",
+        "uri": "https://cdn.synergy-network.io/docs/token-info.pdf",
         "type": "application/pdf"
       },
       {
-        "uri": "https://cdn.synergy.network/media/syn.png",
+        "uri": "https://gateway.pinata.cloud/ipfs/bafkreidslh4we7japm2nlwfhq2tw6xamq7jsiyqmyfxzf4wvlcpgmspkyq",
         "type": "image/png"
       }
     ],
@@ -64,5 +70,12 @@
   "burn_policy": "2% burn on every transfer",
   "sp_allocation_policy": "Distributed based on task complexity, uptime, and cross-validator collaboration.",
   "sp_eligible_roles": "Validators, Creators, Auditors",
-  "sp_bonus_conditions": "+15% bonus for multi-validator coordination and sustained uptime over 30 days"
+  "sp_bonus_conditions": "+15% bonus for multi-validator coordination and sustained uptime over 30 days",
+  "verification": {
+    "sns": "verified",
+    "uma": "verified",
+    "domain": "synergy-network.io",
+    "logo_hosted_on": "pinata.cloud",
+    "address_format": "Bech32m sYnQ / sYnU"
+  }
 }

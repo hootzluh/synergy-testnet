@@ -1,61 +1,76 @@
 use std::net::TcpListener;
 use std::io::{Read, Write};
-use synergy_testnet::transaction::Transaction; // adjust path if needed
-use serde_json::Result as SerdeResult;
+use crate::transaction::Transaction;
+use crate::config::NodeConfig;
 
-pub fn start_rpc_server() {
-    let listener = TcpListener::bind("0.0.0.0:8545").expect("Failed to bind RPC server");
-    println!("RPC server running on 0.0.0.0:8545");
+/// Start a minimal JSON-over-HTTP RPC server for broadcasting transactions.
+pub fn start_rpc_server(config: &NodeConfig) {
+    let addr = config.rpc.listen_address.as_str();
+    let listener = TcpListener::bind(addr).expect("Failed to bind RPC server");
+    println!("🌐 RPC server running on {}", addr);
 
     for stream in listener.incoming() {
         match stream {
             Ok(mut stream) => {
                 let mut buffer = [0; 2048];
-                let bytes_read = stream.read(&mut buffer).unwrap();
-                let request_str = String::from_utf8_lossy(&buffer[..bytes_read]);
+                if let Ok(bytes_read) = stream.read(&mut buffer) {
+                    let request_str = String::from_utf8_lossy(&buffer[..bytes_read]);
 
-                println!("\n--- Incoming RPC Request ---\n{}\n", request_str);
+                    println!("🔁 Incoming RPC request:\n{}", request_str);
 
-                if request_str.contains("POST /broadcast") {
-                    if let Some(json_body) = extract_json(&request_str) {
-                        match serde_json::from_str::<Transaction>(&json_body) {
-                            Ok(tx) => {
-                                println!("✅ Received transaction: {:?}", tx);
-                                if tx.validate() {
-                                    let response = format!(
-                                        "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 26\r\n\r\nTransaction broadcasted."
-                                    );
-                                    stream.write_all(response.as_bytes()).unwrap();
-                                } else {
-                                    let response = "HTTP/1.1 400 Bad Request\r\nContent-Length: 20\r\n\r\nInvalid transaction";
-                                    stream.write_all(response.as_bytes()).unwrap();
+                    if request_str.contains("POST /broadcast") {
+                        if let Some(json_body) = extract_json(&request_str) {
+                            match serde_json::from_str::<Transaction>(&json_body) {
+                                Ok(tx) if tx.validate() => {
+                                    println!("✅ Valid transaction: {:?}", tx);
+                                    let response = http_response(200, r#"{"status":"broadcasted"}"#);
+                                    let _ = stream.write_all(response.as_bytes());
+                                }
+                                Ok(_) => {
+                                    let response = http_response(400, r#"{"error":"invalid transaction"}"#);
+                                    let _ = stream.write_all(response.as_bytes());
+                                }
+                                Err(_) => {
+                                    let response = http_response(400, r#"{"error":"malformed json"}"#);
+                                    let _ = stream.write_all(response.as_bytes());
                                 }
                             }
-                            Err(e) => {
-                                println!("❌ Failed to parse transaction: {:?}", e);
-                                let response = "HTTP/1.1 400 Bad Request\r\nContent-Length: 24\r\n\r\nInvalid transaction data";
-                                stream.write_all(response.as_bytes()).unwrap();
-                            }
                         }
+                    } else {
+                        let response = http_response(404, r#"{"error":"not found"}"#);
+                        let _ = stream.write_all(response.as_bytes());
                     }
-                } else {
-                    let response = "HTTP/1.1 404 Not Found\r\nContent-Length: 9\r\n\r\nNot Found";
-                    stream.write_all(response.as_bytes()).unwrap();
                 }
             }
             Err(e) => {
-                println!("Connection failed: {}", e);
+                eprintln!("❌ RPC connection error: {}", e);
             }
         }
     }
 }
 
-// --- Helper to extract JSON from raw HTTP POST ---
+/// Extract JSON body from raw HTTP POST string
 fn extract_json(request: &str) -> Option<String> {
-    let parts: Vec<&str> = request.split("\r\n\r\n").collect();
-    if parts.len() > 1 {
-        Some(parts[1].trim().to_string())
-    } else {
-        None
+    request.split("\r\n\r\n").nth(1).map(str::trim).map(str::to_string)
+}
+
+/// Helper to build HTTP/1.1 responses
+fn http_response(status: u16, body: &str) -> String {
+    format!(
+        "HTTP/1.1 {} {}\r\nContent-Type: application/json\r\nContent-Length: {}\r\n\r\n{}",
+        status,
+        http_status_msg(status),
+        body.len(),
+        body
+    )
+}
+
+/// Maps status codes to message strings
+fn http_status_msg(code: u16) -> &'static str {
+    match code {
+        200 => "OK",
+        400 => "Bad Request",
+        404 => "Not Found",
+        _ => "Unknown",
     }
 }

@@ -1,18 +1,29 @@
 #!/bin/bash
 
-# Initialize the Synergy Testnet
-echo "Initializing Synergy Testnet..."
-mkdir -p data
+# Start Synergy Testnet Node
 
-# Kill any existing synergy-testnet processes
+echo "🔧 Initializing Synergy Testnet..."
+
+# Set script path to root of the project
+cd "$(dirname "$0")/.."
+
+# Prepare data directory
+mkdir -p data/logs
+
+# Kill any existing node processes
 pkill -f synergy-testnet || true
-
-# Give the system a moment to free resources
 sleep 1
 
-# Use full path to cargo with the correct binary name
-$HOME/.cargo/bin/cargo run --release --bin synergy-testnet -- --genesis config/genesis.json &
-NODE_PID=$!
+# Build and launch testnet binary
+echo "🚀 Launching node..."
+cargo build --release --bin synergy-testnet
 
-echo "Synergy Testnet started with PID $NODE_PID"
+# Run the node in background with genesis and config loaded
+./target/release/synergy-testnet \
+  --genesis config/genesis.json \
+  --config config/network-config.toml \
+  > data/logs/testnet.out 2>&1 &
+
+NODE_PID=$!
+echo "✅ Synergy Testnet started with PID $NODE_PID"
 echo $NODE_PID > data/testnet.pid

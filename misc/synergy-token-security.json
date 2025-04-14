@@ -1,0 +1,40 @@
+{
+  "wallet": {
+    "wallet_name": "Synergy Foundation Wallet",
+    "sns_name": "foundation.sns",
+    "seed_phrase": "marble portion easily margin grape velvet indoor pen true detail nasty recipe scatter danger session join sunset skin brave drink celery divert tank stick",
+    "passphrase_hash": "8bdf5c72e067f60e1a87f5e2f6a7b3347a99f9b4f070c2f406d76d3e7d8c6f95",
+    "pin_hash": "3e23e8160039594a33894f6564e1b1348bbdff3905e3567c0f3f0b81e82a0eaf",
+    "public_key": "sYnQ1zxy8qhj4j59xp5lwkwpd5qws9aygz8pl9m3kmjx3",
+    "private_key_encrypted": "U2FsdGVkX1+YqdMns6L4Vvc3WQGiOj+hvnaCvKv3Hcs=",
+    "uma_address": "UMA1fnze6kshv3lkpe47wpkwd2ch9ewr5v7c8qq7l6td9t8",
+    "wallet_type": "Hot"
+  },
+  "token": {
+    "token_name": "Synergy Token",
+    "token_symbol": "SYN",
+    "contract_address": "sYnU1jrm8rhd38slkmn4whgpf2z4zprcnz6e8sxj0xtdcf",
+    "mint_address": "sYnU1mint8qhd4ayxt2m4kcc5wljxp2aemmt4pjyg0g7v9",
+    "associated_token_address": "sYnQ1tokn3qhp7el9pdl5fqqzhnk4v3xyc7egmfy5a4rcl",
+    "creator_wallet": "sYnQ1zxy8qhj4j59xp5lwkwpd5qws9aygz8pl9m3kmjx3",
+    "update_authority": "sYnU1auth9gqp4kpx3hdzwzqlxlyc0g6tqyz3k9gwdhfwru",
+    "freeze_authority": "sYnU1frze7jqp2epaklm3rkzpvm8zks7fncjgsy9ufdmp3"
+  },
+  "smart_contract": {
+    "contract_name": "SynergyTokenContract",
+    "contract_address": "sYnU1jrm8rhd38slkmn4whgpf2z4zprcnz6e8sxj0xtdcf",
+    "contract_creator_wallet": "sYnQ1zxy8qhj4j59xp5lwkwpd5qws9aygz8pl9m3kmjx3",
+    "source_file": "contracts/synergy_token.rs",
+    "compiled_hash": "f1d2d2f924e986ac86fdf7b36c94bcdf32beec15",
+    "deploy_tx": "0xf15b8d2a9e437be1240f7c8fceaf31eb8b14a3f1c8cba2ff4f16c3cb1aa89cda"
+  },
+  "validator_node": {
+    "node_id": "validator-01",
+    "sns_name": "validator1.sns",
+    "public_key": "sYnQ1vdtrqhp9elxt7r2wkcw5hjqskk3cmxk8mp2hynkrd",
+    "private_key_encrypted": "U2FsdGVkX18jh3qmn6c4ah28Ff93Kl0jd4f8cvxH92c=",
+    "validator_type": "Transaction",
+    "associated_wallet": "sYnQ1zxy8qhj4j59xp5lwkwpd5qws9aygz8pl9m3kmjx3",
+    "stake_amount": "50000"
+  }
+}

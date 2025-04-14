@@ -1,64 +1,122 @@
 # Synergy Network Testnet
 
-## Overview
+## 🚀 Overview
 
-The **Synergy Network Testnet** is an experimental blockchain environment designed to test and refine the Synergy Network before its mainnet launch. This testnet is built **from scratch**, independent of existing blockchains, using a novel **Proof of Synergy (PoSy)** consensus mechanism.
+The **Synergy Network Testnet** is a custom blockchain implementation featuring the novel **Proof of Synergy (PoSy)** consensus mechanism. This testnet serves as the proving ground for interoperability, validator behaviors, wallet generation, and token metadata validation prior to mainnet launch.
 
-## Features
+---
 
-- **Custom blockchain protocol** with a focus on scalability and decentralization.
-- **Peer-to-peer networking** using Libp2p.
-- **Efficient state storage** leveraging RocksDB.
-- **JSON-RPC API** for seamless blockchain interaction.
-- **Secure cryptographic signing** using Ed25519/ECDSA.
+## 🔧 Features
 
-## Getting Started
+- ✅ Custom Rust blockchain runtime
+- ✅ PoSy consensus algorithm with validator clustering
+- ✅ Bech32m address formatting with SNS/UMA integration
+- ✅ JSON-RPC API with HTTP POST support
+- ✅ RocksDB-based persistent storage
+- ✅ Secure key signing using Dilithium-3 PQC
+
+---
+
+## 📦 Prerequisites
+
+Install the required system and Rust toolchain dependencies:
+
+```bash
+sudo apt install build-essential libssl-dev pkg-config
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+rustup target add wasm32-unknown-unknown
+```
+
+---
+
+## 🛠️ Getting Started
 
 ### 1. Clone the Repository
 
-```sh
+```bash
 git clone https://github.com/YOUR_USERNAME/synergy-testnet.git
 cd synergy-testnet
 ```
 
-### 2. Install Dependencies
+### 2. Build the Node Binary
 
-Refer to the `dependencies/` directory for installation scripts.
+```bash
+cargo build --release --bin synergy-testnet
+```
 
-### 3. Start the Testnet
+### 3. Start the Local Node
 
-Run the setup script:
-
-```sh
+```bash
 bash scripts/start-testnet.sh
 ```
 
-### 4. Stop the Testnet
+- Genesis: `config/genesis.json`
+- Config: `config/network-config.toml`
+- Logs saved to `data/logs/testnet.out`
 
-To safely shut down the testnet:
+### 4. Stop the Node
 
-```sh
+```bash
 bash scripts/stop-testnet.sh
 ```
 
-## Repository Structure
+---
 
-```sh
+## 🌐 Running Additional Nodes
+
+To start a new node and connect it to an existing testnet:
+
+1. Copy the full repository to a second machine.
+2. Update `config/network-config.toml` with:
+   - A unique `listen.p2p` IP and port
+   - `bootnodes` pointing to your initial node's public IP
+3. Sync both nodes by running `start-testnet.sh` on each.
+4. Use consistent `genesis.json` on all nodes.
+
+---
+
+## 📚 Repository Structure
+
+```
 synergy-testnet/
-│── config/                # Blockchain configuration files
-│── src/                   # Source code for nodes, consensus, and RPC
-│── scripts/               # Utility scripts
-│── docs/                  # Documentation
-│── dependencies/          # External dependencies
-│── tests/                 # Test cases
-│── .gitignore             # Ignored files
-│── LICENSE                # License file
+├── config/              # Genesis, network config, token metadata
+├── src/                 # Blockchain logic, consensus, RPC
+├── scripts/             # Start/stop shell scripts
+├── docs/                # Markdown documentation
+├── dependencies/        # Dependency templates or packages
+├── tests/               # Test cases
 ```
 
-## Contributing
+---
 
-Contributions are welcome! Please follow the [contribution guidelines](docs/contributing.md) when submitting pull requests.
+## 🧪 JSON-RPC Endpoint (Manual)
 
-## License
+Send raw HTTP POST requests to:
 
-This project is licensed under the [MIT License](LICENSE).
+```
+http://localhost:8545/broadcast
+```
+
+Payload format:
+
+```json
+{
+  "sender": "sYnQ1...",
+  "receiver": "sYnU1...",
+  "amount": 1000,
+  "nonce": 1,
+  "signature": "abc123..."
+}
+```
+
+---
+
+## 🤝 Contributing
+
+We welcome PRs! Please fork, commit with clarity, and submit a pull request. For bugs or roadmap input, open a GitHub issue.
+
+---
+
+## 📜 License
+
+This project is MIT licensed — see the [LICENSE](../LICENSE) file for full terms.
