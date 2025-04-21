@@ -1,5 +1,4 @@
-use synergy_testnet::block::{Block, BlockChain};
-use synergy_testnet::transaction::Transaction;
+
 use synergy_testnet::consensus::consensus_algorithm::ProofOfSynergy;
 use synergy_testnet::rpc;
 use std::env;

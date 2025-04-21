@@ -17,11 +17,9 @@ sleep 1
 # Build the node
 echo "🚀 Launching node..."
 cargo build --release --bin synergy-testnet
-
-# Start node in background and redirect logs
-nohup ./target/release/synergy-testnet \
-  --genesis config/genesis.json \
-  --config config/network-config.toml \
+cargo run --release -- start
+# Start node in background using the correct subcommand: `start`
+nohup ./target/release/synergy-testnet start \
   > data/logs/testnet.out 2>&1 &
 
 NODE_PID=$!

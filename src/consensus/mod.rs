@@ -5,16 +5,11 @@
 
 pub mod consensus_algorithm;
 
-use crate::block::{Block, BlockChain};
-use crate::transaction::Transaction;
-
 use self::consensus_algorithm::ProofOfSynergy;
 
 /// Starts the consensus mechanism using Proof of Synergy.
-pub fn start_consensus(chain: &mut BlockChain, pending: Vec<Transaction>) {
+pub fn start_consensus() {
     let mut engine = ProofOfSynergy::new();
     engine.initialize();
-    let block = engine.mine_block(chain, pending);
-    chain.add_block(block);
-    println!("✅ New block mined and added to chain.");
+    engine.execute(); // Starts the mining loop
 }

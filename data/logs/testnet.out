@@ -1,2 +1,13 @@
 Synergy Testnet Node Starting...
-Unknown subcommand: --genesis
+Starting the node...
+📡 RPC server running on 0.0.0.0:8545
+🔧 Chain loaded. Latest height: 0
+⚙️ Executing consensus engine...
+⏳ No transactions to include in block.
+⏳ No transactions to include in block.
+⏳ No transactions to include in block.
+⏳ No transactions to include in block.
+⏳ No transactions to include in block.
+⏳ No transactions to include in block.
+⏳ No transactions to include in block.
+⏳ No transactions to include in block.
