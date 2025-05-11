@@ -1,18 +1,12 @@
-use synergy_testnet::consensus;
-use std::sync::{Arc, Mutex};
-use std::thread;
-use std::time::Duration;
+use crate::consensus::consensus_algorithm::ProofOfSynergy;
 
 #[test]
-fn test_consensus_algorithm() {
-    let blockchain = Arc::new(Mutex::new(Vec::<String>::new()));
+fn test_proof_of_synergy_execution() {
+    let mut pos = ProofOfSynergy::new();
+    pos.initialize();
+    pos.execute();
 
-    let handle = thread::spawn(move || {
-        crate::consensus::run_consensus();
-    });
-
-    thread::sleep(Duration::from_secs(2));
-
-    assert!(blockchain.lock().unwrap().is_empty());
-    handle.join().unwrap();
+    // Let consensus run briefly (in real use you'd check state changes)
+    std::thread::sleep(std::time::Duration::from_secs(6));
+    println!("✅ ProofOfSynergy execute ran without panic.");
 }

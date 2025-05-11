@@ -1,30 +1,28 @@
-use std::io::Write;
+use std::io::{Read, Write};
 use std::net::TcpStream;
 use crate::transaction::Transaction;
 
-pub fn broadcast_transaction() {
-    let tx = Transaction::new(
-        "sYnQ1zxy8qhj4j59xp5lwkwpd5qws9aygz8pl9m3kmjx3".to_string(),
-        "sYnQ1wlt52dlk9scmzphw7uc8p72v28j47yd8g0drmtc".to_string(),
-        1000,
-        1, // nonce
-        "demo-signature-placeholder".to_string(), // dummy signature for now
-    );
-
+/// Broadcasts a fully signed and validated transaction to the local Synergy Testnet RPC server.
+pub fn broadcast_transaction(tx: Transaction) -> Result<String, String> {
     let tx_data = tx.to_json();
-
     println!("\n📡 Broadcasting transaction:\n{}", tx_data);
 
-    match TcpStream::connect("192.168.1.68:8545") {
-        Ok(mut stream) => {
-            if let Err(e) = stream.write_all(tx_data.as_bytes()) {
-                eprintln!("❌ Failed to send transaction: {}", e);
-            } else {
-                println!("✅ Transaction sent successfully");
-            }
-        }
-        Err(e) => {
-            eprintln!("❌ Connection failed: {}", e);
-        }
-    }
+    let mut stream = TcpStream::connect("127.0.0.1:8545")
+        .map_err(|e| format!("❌ Could not connect to Synergy RPC at 127.0.0.1:8545 — {}", e))?;
+
+    stream
+        .write_all(tx_data.as_bytes())
+        .map_err(|e| format!("❌ Failed to send transaction data: {}", e))?;
+
+    stream
+        .flush()
+        .map_err(|e| format!("❌ Failed to flush stream: {}", e))?;
+
+    let mut response = String::new();
+    stream
+        .read_to_string(&mut response)
+        .map_err(|e| format!("⚠️ Failed to read response from node: {}", e))?;
+
+    println!("✅ Response from node:\n{}", response);
+    Ok(response)
 }

@@ -42,24 +42,25 @@ pub struct RPCConfig {
     pub enable_cors: bool,
 }
 
+/// Fallback configuration values in the absence of a config file
 impl Default for NodeConfig {
     fn default() -> Self {
         NodeConfig {
             network: NetworkConfig {
-                node_name: "default-node".into(),
-                listen_address: "0.0.0.0:30303".into(),
-                public_address: "127.0.0.1:30303".into(),
+                node_name: "synergy-default-node".to_string(),
+                listen_address: "0.0.0.0:30303".to_string(),
+                public_address: "127.0.0.1:30303".to_string(),
                 bootnodes: vec![],
             },
             consensus: ConsensusConfig {
-                algorithm: "PoSy".into(),
+                algorithm: "PoSy".to_string(),
                 block_time_secs: 6,
                 max_validators: 21,
                 synergetic_mode: true,
             },
             logging: LoggingConfig {
-                log_level: "info".into(),
-                log_file: "logs/synergy-node.log".into(),
+                log_level: "info".to_string(),
+                log_file: "logs/synergy-node.log".to_string(),
             },
             rpc: RPCConfig {
                 http_port: 8545,
@@ -70,7 +71,7 @@ impl Default for NodeConfig {
     }
 }
 
-/// Loads the configuration from the specified TOML path or environment variable fallback.
+/// Loads the configuration from TOML file or returns an error with helpful diagnostics
 pub fn load_node_config(path: Option<&str>) -> Result<NodeConfig, Box<dyn Error>> {
     let config_path = match path {
         Some(p) => p.to_string(),
@@ -78,10 +79,18 @@ pub fn load_node_config(path: Option<&str>) -> Result<NodeConfig, Box<dyn Error>
     };
 
     if !Path::new(&config_path).exists() {
-        return Err(format!("Config file not found: {}", config_path).into());
+        return Err(format!("❌ Configuration file not found: {}", config_path).into());
     }
 
     let content = fs::read_to_string(&config_path)?;
     let config: NodeConfig = toml::from_str(&content)?;
+
+    // Optional: Display loaded config summary
+    println!("✅ Loaded configuration from {}", config_path);
+    println!("Node ID: {}", config.network.node_name);
+    println!("Public Address: {}", config.network.public_address);
+    println!("Consensus Algorithm: {}", config.consensus.algorithm);
+    println!("Logging Output: {}", config.logging.log_file);
+
     Ok(config)
 }

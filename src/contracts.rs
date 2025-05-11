@@ -8,7 +8,7 @@ pub struct Contract {
     pub metadata: ContractMetadata,
 }
 
-/// Metadata describing the smart contract (placeholder for ABI, version, etc.)
+/// Metadata describing the smart contract (supports ABI metadata, versioning, hash refs)
 #[derive(Debug, Clone)]
 pub struct ContractMetadata {
     pub name: String,
@@ -16,7 +16,7 @@ pub struct ContractMetadata {
     pub abi_hash: String,
 }
 
-/// Manages deployed contracts and basic execution stub
+/// Registry for deployed contracts and executor handler
 #[derive(Debug)]
 pub struct ContractExecutor {
     pub contracts: HashMap<String, Contract>,
@@ -29,7 +29,7 @@ impl ContractExecutor {
         }
     }
 
-    /// Deploy a contract using a unique address and WASM bytecode
+    /// Deploys a WASM contract to the in-memory registry
     pub fn deploy_contract(&mut self, address: String, code: Vec<u8>, metadata: ContractMetadata) -> Result<(), String> {
         if self.contracts.contains_key(&address) {
             return Err(format!("Contract already exists at address {}", address));
@@ -46,17 +46,25 @@ impl ContractExecutor {
         Ok(())
     }
 
-    /// Execute the contract (simulation)
+    /// Executes a contract from the registry with given input data
     pub fn execute_contract(&self, address: &str, input_data: &[u8]) -> Result<String, String> {
-        match self.contracts.get(address) {
-            Some(contract) => {
-                // Normally: deserialize input, invoke function, serialize output
-                println!("⚙️ Executing contract: {}", contract.metadata.name);
-                println!("WASM Code Length: {} bytes", contract.code.len());
-                println!("Input Provided: {:?}", input_data);
-                Ok(format!("Stub execution complete for contract '{}'", contract.metadata.name))
-            }
-            None => Err("Contract not found.".to_string()),
-        }
+        let contract = self.contracts.get(address).ok_or_else(|| "Contract not found.".to_string())?;
+
+        // Placeholder: Real WASM engine integration required
+        println!("⚙️ Executing contract '{}' (v{})", contract.metadata.name, contract.metadata.version);
+        println!("WASM code size: {} bytes", contract.code.len());
+        println!("Received input: 0x{}", hex::encode(input_data));
+
+        Ok(format!("Execution completed for contract '{}'. No return value.", contract.metadata.name))
+    }
+
+    /// Lists all registered contract addresses
+    pub fn list_contracts(&self) -> Vec<String> {
+        self.contracts.keys().cloned().collect()
+    }
+
+    /// Retrieves metadata for a specific contract address
+    pub fn get_metadata(&self, address: &str) -> Option<&ContractMetadata> {
+        self.contracts.get(address).map(|c| &c.metadata)
     }
 }

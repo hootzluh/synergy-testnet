@@ -1,14 +1,22 @@
-use synergy_testnet::node::Blockchain;
+use crate::contracts::{ContractExecutor, ContractMetadata};
 
 #[test]
-fn test_smart_contract_deployment() {
-    let mut blockchain = Blockchain::new();
+fn test_contract_deployment_and_execution() {
+    let mut executor = ContractExecutor::new();
 
-    let contract_address = "0xABC123".to_string();
-    let contract_code = vec![0x00, 0x61, 0x73, 0x6D]; // Sample WASM header
+    let metadata = ContractMetadata {
+        name: "TestContract".to_string(),
+        version: "0.1.0".to_string(),
+        abi_hash: "fakehash123".to_string(),
+    };
 
-    blockchain.deploy_smart_contract(contract_address.clone(), contract_code);
-    blockchain.execute_smart_contract(&contract_address);
+    let wasm_code = vec![0x00, 0x61, 0x73, 0x6d]; // WASM magic header
+    let address = "sYnQ-CONTRACT-abc123".to_string();
 
-    println!("Smart Contract Test Passed!");
+    executor.deploy_contract(address.clone(), wasm_code.clone(), metadata.clone()).unwrap();
+
+    let result = executor.execute_contract(&address, b"input-bytes");
+    assert!(result.is_ok());
+
+    println!("✅ Contract deployed and simulated execution succeeded.");
 }

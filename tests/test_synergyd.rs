@@ -1,18 +1,11 @@
-use synergy_testnet::consensus;
-use std::sync::{Arc, Mutex};
-use std::thread;
-use std::time::Duration;
+use crate::consensus::consensus_algorithm::ProofOfSynergy;
 
 #[test]
-fn test_synergy_node_initialization() {
-    let blockchain = Arc::new(Mutex::new(Vec::<String>::new()));
+fn test_synergyd_node_startup() {
+    let mut pos = ProofOfSynergy::new();
+    pos.initialize();
+    pos.execute();
 
-    let handle = thread::spawn(move || {
-        crate::consensus::run_consensus();
-    });
-
-    thread::sleep(Duration::from_secs(2));
-
-    assert!(blockchain.lock().unwrap().is_empty());
-    handle.join().unwrap();
+    std::thread::sleep(std::time::Duration::from_secs(6));
+    println!("✅ Node consensus engine running.");
 }

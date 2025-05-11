@@ -1,15 +1,28 @@
-use synergy_testnet::node::Blockchain;
+use crate::block::BlockChain;
+use crate::transaction::Transaction;
 
 #[test]
-fn test_transaction_processing() {
-    let mut blockchain = Blockchain::new();
-    assert_eq!(blockchain.chain.len(), 1); // Genesis block should exist
+fn test_transaction_in_block() {
+    let tx = Transaction::new(
+        "sYnQ1sender".to_string(),
+        "sYnQ1receiver".to_string(),
+        50,
+        1,
+        "valid-sig".to_string(),
+    );
 
-    blockchain.add_transaction("Alice".to_string(), "Bob".to_string(), 100);
-    blockchain.mine_block();
+    let mut chain = BlockChain::new();
+    chain.genesis();
 
-    assert_eq!(blockchain.chain.len(), 2); // New block should be added
-    assert_eq!(blockchain.chain[1].transactions.len(), 1); // Block should contain one transaction
+    let block = Block::new(
+        1,
+        vec![tx.clone()],
+        chain.last().unwrap().hash.clone(),
+        "validator-123".to_string(),
+        0,
+    );
 
-    println!("Blockchain State: {:?}", blockchain.chain);
+    assert_eq!(block.transactions.len(), 1);
+    assert_eq!(block.transactions[0].amount, 50);
+    println!("✅ Transaction successfully included in block.");
 }

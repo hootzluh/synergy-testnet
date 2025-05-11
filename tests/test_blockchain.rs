@@ -1,15 +1,20 @@
-use synergy_testnet::node::Blockchain;
+use crate::block::BlockChain;
 
 #[test]
-fn test_block_creation() {
-    let mut blockchain = Blockchain::new();
-    assert_eq!(blockchain.chain.len(), 1); // Genesis block should exist
+fn test_blockchain_add_and_retrieve_block() {
+    let mut chain = BlockChain::new();
+    chain.genesis();
 
-    blockchain.add_transaction("Alice".to_string(), "Bob".to_string(), 100);
-    blockchain.mine_block();
+    let block = Block::new(
+        1,
+        vec![],
+        chain.last().unwrap().hash.clone(),
+        "test-validator".to_string(),
+        0,
+    );
 
-    assert_eq!(blockchain.chain.len(), 2); // New block should be added
-    assert_eq!(blockchain.chain[1].transactions.len(), 1); // Block should contain one transaction
+    chain.add_block(block.clone());
 
-    println!("Blockchain State: {:?}", blockchain.chain);
+    assert_eq!(chain.last().unwrap().block_index, 1);
+    println!("✅ Block successfully added and retrieved.");
 }

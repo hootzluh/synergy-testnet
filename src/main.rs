@@ -1,17 +1,16 @@
-
 use synergy_testnet::consensus::consensus_algorithm::ProofOfSynergy;
-use synergy_testnet::rpc;
+use synergy_testnet::rpc::rpc_server::start_rpc_server;
 use std::env;
 use std::fs;
 use std::path::PathBuf;
-use std::process;
+use std::process::{self, Command};
 
 fn main() {
-    println!("Synergy Testnet Node Starting...");
+    println!("🚀 Synergy Testnet Node Booting...");
 
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
-        eprintln!("Usage: synergy-testnet <subcommand>");
+        eprintln!("❌ Usage: synergy-testnet <init|start|status>");
         process::exit(1);
     }
 
@@ -22,34 +21,79 @@ fn main() {
             let config_dir = PathBuf::from("config");
             if !config_dir.exists() {
                 fs::create_dir_all(&config_dir).expect("Failed to create config directory");
-                println!("Created config directory.");
+                println!("✅ Created 'config' directory.");
             } else {
-                println!("Config directory already exists.");
+                println!("ℹ️ 'config' directory already exists.");
+            }
+
+            let default_files = vec![
+                ("consensus-config.toml", include_str!("../config/consensus-config.toml")),
+                ("network-config.toml", include_str!("../config/network-config.toml")),
+                ("node_config.toml", include_str!("../config/node_config.toml")),
+                ("token_metadata.json", include_str!("../config/token_metadata.json")),
+                ("genesis.json", include_str!("../config/genesis.json")),
+            ];
+
+            for (file, content) in default_files {
+                let file_path = config_dir.join(file);
+                if !file_path.exists() {
+                    fs::write(&file_path, content).expect("Failed to write default config file");
+                    println!("✅ Wrote default {}", file);
+                } else {
+                    println!("ℹ️ {} already exists", file);
+                }
             }
         }
 
         "start" => {
-            println!("Starting the node...");
+            println!("🟢 Starting Synergy Node Components...");
 
-            // Start RPC server in a new thread and keep the handle
             let rpc_handle = std::thread::spawn(|| {
-                rpc::rpc_server::start_rpc_server();
+                start_rpc_server();
             });
 
             let mut consensus = ProofOfSynergy::new();
-            consensus.initialize();
-            consensus.execute();
+            if let Err(e) = consensus.initialize() {
+                eprintln!("❌ Consensus Initialization Error: {:?}", e);
+                process::exit(1);
+            }
 
-            // Keep the main thread alive after consensus by joining the RPC thread
-            rpc_handle.join().unwrap();
+            if let Err(e) = consensus.execute() {
+                eprintln!("❌ Consensus Execution Error: {:?}", e);
+                process::exit(1);
+            }
+
+            rpc_handle.join().expect("RPC server thread panicked");
         }
 
         "status" => {
-            println!("Node status: Online");
+            let output = Command::new("curl")
+                .arg("-s")
+                .arg("-X")
+                .arg("POST")
+                .arg("--data")
+                .arg(r#"{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}"#)
+                .arg("http://127.0.0.1:8545")
+                .output();
+
+            match output {
+                Ok(result) => {
+                    if result.status.success() {
+                        println!("✅ Node status: Online");
+                        println!("⛓️ Latest block: {}", String::from_utf8_lossy(&result.stdout));
+                    } else {
+                        println!("⚠️ Node status: RPC offline or unreachable");
+                    }
+                }
+                Err(_) => {
+                    println!("❌ Could not determine status. Is the node running?");
+                }
+            }
         }
 
         _ => {
-            eprintln!("Unknown subcommand: {}", subcommand);
+            eprintln!("❌ Unknown subcommand: '{}'", subcommand);
+            eprintln!("Usage: synergy-testnet <init|start|status>");
             process::exit(1);
         }
     }
