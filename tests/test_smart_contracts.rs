@@ -1,4 +1,4 @@
-use crate::contracts::{ContractExecutor, ContractMetadata};
+use synergy_testnet::{ContractExecutor, ContractMetadata};
 
 #[test]
 fn test_contract_deployment_and_execution() {

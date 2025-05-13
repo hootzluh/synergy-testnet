@@ -1,4 +1,4 @@
-use crate::consensus::consensus_algorithm::ProofOfSynergy;
+use synergy_testnet::gitProofOfSynergy;
 
 #[test]
 fn test_proof_of_synergy_execution() {

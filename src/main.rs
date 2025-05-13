@@ -53,15 +53,8 @@ fn main() {
             });
 
             let mut consensus = ProofOfSynergy::new();
-            if let Err(e) = consensus.initialize() {
-                eprintln!("❌ Consensus Initialization Error: {:?}", e);
-                process::exit(1);
-            }
-
-            if let Err(e) = consensus.execute() {
-                eprintln!("❌ Consensus Execution Error: {:?}", e);
-                process::exit(1);
-            }
+            consensus.initialize();
+            consensus.execute();
 
             rpc_handle.join().expect("RPC server thread panicked");
         }

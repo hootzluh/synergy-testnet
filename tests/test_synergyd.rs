@@ -1,4 +1,4 @@
-use crate::consensus::consensus_algorithm::ProofOfSynergy;
+use synergy_testnet::consensus::consensus_algorithm::ProofOfSynergy;
 
 #[test]
 fn test_synergyd_node_startup() {

@@ -1,4 +1,5 @@
-use crate::block::BlockChain;
+use synergy_testnet::block::BlockChain;
+
 
 #[test]
 fn test_blockchain_add_and_retrieve_block() {

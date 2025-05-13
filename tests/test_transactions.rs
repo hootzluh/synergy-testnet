@@ -1,5 +1,5 @@
-use crate::block::BlockChain;
-use crate::transaction::Transaction;
+use synergy_testnet::block::BlockChain;
+use synergy_testnet::transaction::Transaction;
 
 #[test]
 fn test_transaction_in_block() {
