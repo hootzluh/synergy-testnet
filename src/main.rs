@@ -1,5 +1,5 @@
 use synergy_testnet::consensus::consensus_algorithm::ProofOfSynergy;
-use synergy_testnet::rpc::rpc_server::start_rpc_server;
+use synergy_testnet::rpc::rpc_server::{start_rpc_server, CHAIN};
 use std::env;
 use std::fs;
 use std::path::PathBuf;
@@ -10,7 +10,7 @@ fn main() {
 
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
-        eprintln!("❌ Usage: synergy-testnet <init|start|status>");
+        eprintln!("❌ Usage: synergy-testnet <init|start|status|mine>");
         process::exit(1);
     }
 
@@ -84,9 +84,15 @@ fn main() {
             }
         }
 
+        "mine" => {
+            println!("🔨 Attempting to mine pending transactions...");
+            let mut chain = CHAIN.lock().unwrap();
+            chain.mine_pending_block("validator_1");
+        }
+
         _ => {
             eprintln!("❌ Unknown subcommand: '{}'", subcommand);
-            eprintln!("Usage: synergy-testnet <init|start|status>");
+            eprintln!("Usage: synergy-testnet <init|start|status|mine>");
             process::exit(1);
         }
     }
